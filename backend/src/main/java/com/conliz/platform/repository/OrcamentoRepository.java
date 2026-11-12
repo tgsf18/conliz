@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface OrcamentoRepository extends JpaRepository<Orcamento, UUID> {
     Optional<Orcamento> findByCodigo(String codigo);
     List<Orcamento> findByStatusOrderByCriadoEmDesc(String status);
+    Page<Orcamento> findByStatus(String status, Pageable pageable);
     Page<Orcamento> findAllByOrderByCriadoEmDesc(Pageable pageable);
     long countByStatus(String status);
 }

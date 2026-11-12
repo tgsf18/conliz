@@ -46,8 +46,10 @@ conliz:
     lockout-minutes: ${ACCOUNT_LOCKOUT_DURATION_MINUTES:15}
   admin:
     email: ${CONLIZ_ADMIN_EMAIL:admin@conliz.com.br}
-    password: ${CONLIZ_ADMIN_PASSWORD:ConlizAdmin2026!#Segura}
+    password: ${CONLIZ_ADMIN_PASSWORD:}
     name: ${CONLIZ_ADMIN_NAME:Diretoria Conliz}
+  totp:
+    issuer: ${TOTP_ISSUER:Conliz Construtora}
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://127.0.0.1:3000}
 

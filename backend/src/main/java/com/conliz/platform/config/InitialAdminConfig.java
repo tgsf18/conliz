@@ -21,7 +21,7 @@ public class InitialAdminConfig implements CommandLineRunner {
     @Value("${conliz.admin.email:admin@conliz.com.br}")
     private String adminEmail;
 
-    @Value("${conliz.admin.password:ConlizAdmin2026!#Segura}")
+    @Value("${conliz.admin.password:}")
     private String adminPassword;
 
     @Value("${conliz.admin.name:Diretoria Conliz}")
@@ -34,6 +34,11 @@ public class InitialAdminConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        if (adminPassword == null || adminPassword.isBlank()) {
+            log.warn("CONLIZ_ADMIN_PASSWORD não definido. Seed de usuários administrativos ignorado.");
+            return;
+        }
+
         // 1. Initial ADMIN User
         if (!userRepository.existsByEmail(adminEmail.toLowerCase().trim())) {
             User admin = new User(

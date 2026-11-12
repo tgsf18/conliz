@@ -38,3 +38,6 @@ logs/
 
 # Database data
 postgres_data/
+
+# TypeScript incremental build
+*.tsbuildinfo

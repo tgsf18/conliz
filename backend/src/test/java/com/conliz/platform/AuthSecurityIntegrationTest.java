@@ -125,7 +125,7 @@ public class AuthSecurityIntegrationTest {
         }
 
         // 6th attempt should be blocked by account lockout
-        User user = userRepository.findByEmail("admin@conliz.com.br").orElseThrow();
+        User user = userRepository.findByEmail("admin@conliz.com.br").orElseThrow(() -> new IllegalStateException("admin inicial não encontrado"));
         assertThat(user.isLockedOut()).isTrue();
 
         mockMvc.perform(post("/api/auth/login")
@@ -138,7 +138,7 @@ public class AuthSecurityIntegrationTest {
     @Test
     @DisplayName("2FA TOTP: Usuário com 2FA ativado deve exigir pre-auth e código TOTP ou recuperação")
     void testTwoFactorTotpWorkflow() throws Exception {
-        User user = userRepository.findByEmail("admin@conliz.com.br").orElseThrow();
+        User user = userRepository.findByEmail("admin@conliz.com.br").orElseThrow(() -> new IllegalStateException("admin inicial não encontrado"));
         String secret = twoFactorService.generateSecret();
         List<String> recoveryCodes = twoFactorService.generateRecoveryCodes();
         user.setTwoFactorEnabled(true);

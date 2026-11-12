@@ -24,7 +24,8 @@ public class OpenApiConfig {
                                 .email("suporte@conliz.com.br")
                         )
                 )
-                .addSecurityItem(new SecurityRequirement().addList("CookieAuth").addList("BearerAuth"))
+                .addSecurityItem(new SecurityRequirement().addList("CookieAuth").addList("CsrfHeader"))
+                .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("CookieAuth", new SecurityScheme()
                                 .type(SecurityScheme.Type.APIKEY)
@@ -37,6 +38,12 @@ public class OpenApiConfig {
                                 .scheme("bearer")
                                 .bearerFormat("JWT")
                                 .description("Fallback para chamadas de API autenticadas via header")
+                        )
+                        .addSecuritySchemes("CsrfHeader", new SecurityScheme()
+                                .type(SecurityScheme.Type.APIKEY)
+                                .in(SecurityScheme.In.HEADER)
+                                .name("X-XSRF-TOKEN")
+                                .description("Token CSRF (double-submit cookie). Obrigatório em POST/PATCH/PUT/DELETE do painel.")
                         )
                 );
     }

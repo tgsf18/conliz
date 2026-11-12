@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -153,6 +154,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(AuthUserDto.fromEntity(user));
+    }
+
+    @GetMapping("/csrf")
+    @Operation(summary = "Fornecer o token CSRF (double-submit cookie) para o cliente")
+    public ResponseEntity<Map<String, String>> csrf(HttpServletRequest servletRequest) {
+        String token = extractCookieValue(servletRequest, CookieService.CSRF_COOKIE_NAME).orElse("");
+        return ResponseEntity.ok(Map.of("headerName", "X-XSRF-TOKEN", "parameterName", "_csrf", "token", token));
     }
 
     private void applyAuthCookies(HttpServletResponse response, AuthService.AuthResult result) {

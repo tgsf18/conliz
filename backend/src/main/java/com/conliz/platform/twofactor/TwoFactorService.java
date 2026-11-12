@@ -7,6 +7,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import org.apache.commons.codec.binary.Base32;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Mac;
@@ -23,14 +24,18 @@ import java.util.*;
 @Service
 public class TwoFactorService {
 
-    private static final String ISSUER = "Conliz Construtora";
     private static final int TIME_STEP_SECONDS = 30;
     private static final int CODE_DIGITS = 6;
     private static final int WINDOW_SIZE = 1; // +/- 1 time step drift tolerance
 
+    private final String issuer;
     private final SecureRandom secureRandom = new SecureRandom();
     private final Base32 base32 = new Base32();
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public TwoFactorService(@Value("${conliz.totp.issuer:Conliz Construtora}") String issuer) {
+        this.issuer = issuer;
+    }
 
     public record TwoFactorSetupData(String secret, String otpauthUrl, String qrCodeBase64, List<String> recoveryCodes) {}
 
@@ -93,7 +98,7 @@ public class TwoFactorService {
     public TwoFactorSetupData initSetup(String userEmail) {
         String secret = generateSecret();
         List<String> recoveryCodes = generateRecoveryCodes();
-        String encodedIssuer = URLEncoder.encode(ISSUER, StandardCharsets.UTF_8).replace("+", "%20");
+        String encodedIssuer = URLEncoder.encode(issuer, StandardCharsets.UTF_8).replace("+", "%20");
         String encodedEmail = URLEncoder.encode(userEmail, StandardCharsets.UTF_8).replace("+", "%20");
         String otpauthUrl = String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s&algorithm=SHA1&digits=6&period=30",
                 encodedIssuer, encodedEmail, secret, encodedIssuer);
