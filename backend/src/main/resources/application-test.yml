@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+
+conliz:
+  jwt:
+    secret: 1234567890123456789012345678901234567890123456789012345678901234
+    expiration-minutes: 15
+    refresh-expiration-days: 7
+  cookie:
+    secure: false
+    same-site: Strict
+  rate-limit:
+    login-capacity: 1000
+    login-refill-minutes: 1
+    ip-capacity: 1000
+    ip-refill-minutes: 1
+    lockout-attempts: 5
+    lockout-minutes: 15
