@@ -68,6 +68,7 @@ public class SecurityConfig {
                 ROLE_ADMIN > ROLE_COMERCIAL
                 ROLE_ADMIN > ROLE_ENGENHARIA
                 ROLE_ADMIN > ROLE_RH
+                ROLE_ADMIN > ROLE_FINANCEIRO
                 """);
     }
 

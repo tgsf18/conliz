@@ -75,3 +75,8 @@ O `JWT_SECRET` padrão do `application.yml` existe para o perfil local. Em Docke
 - Dashboard em `/admin/dashboard` lê funil, caixa, obras, contratos e headcount dos repositórios.
 - Orçamentos em `/admin/orcamentos`: kanban com a lista completa; visão em lista usa `page` e `size` (máximo 100).
 - Status, notas, PDF (`GET /api/admin/orcamentos/{id}/proposta-pdf`) e conversão em contrato são persistidos, com trilha em `auditoria`.
+- Contratos em `/admin/contratos`: carteira paginada com busca por número/título/cliente, filtro por status, criação (número `CTR-ANO-NNN` gerado) e painel de vencimentos (`GET /api/admin/contratos/vencendo?dias=45`).
+- Financeiro em `/admin/financeiro`: contas a pagar e receber com filtros de tipo/status/período, resumo de caixa (`GET /api/admin/financeiro/resumo`), baixa de títulos e exclusão restrita a `ADMIN`.
+- RH em `/admin/rh`: quadro de pessoal paginado, headcount e folha base por departamento (`GET /api/admin/funcionarios/resumo`), cadastro com CPF único e CPF mascarado na listagem.
+- Papéis: `ADMIN` herda `COMERCIAL`, `ENGENHARIA`, `RH` e `FINANCEIRO`. Escrita financeira exige `ADMIN`/`FINANCEIRO`; RH exige `ADMIN`/`RH`.
+- Todas as escritas do painel passam pelo token CSRF (`X-XSRF-TOKEN`), enviado automaticamente por `src/lib/http.mjs`.

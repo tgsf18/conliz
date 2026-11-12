@@ -4,5 +4,6 @@ public enum Role {
     ADMIN,
     RH,
     COMERCIAL,
-    ENGENHARIA
+    ENGENHARIA,
+    FINANCEIRO
 }
