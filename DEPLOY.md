@@ -24,7 +24,12 @@ Repositório: https://github.com/tgsf18/conliz
 
 1. Crie um projeto em https://supabase.com/dashboard (região **South America (São Paulo)**).
 2. Guarde a senha do banco definida na criação.
-3. Em **Project Settings → Database → Connection string → URI**, copie o modo **Session pooler** (porta `5432`) — obrigatório para conexões de fora da rede do Supabase:
+3. Em **Project Settings → Database → Connection string → URI**, copie o modo **Session pooler** (porta `5432`) — obrigatório para conexões de fora da rede do Supabase.
+
+   > A conexão **direta** (`db.<ref>.supabase.co:5432`) é IPv6-only (salvo o add-on IPv4
+   > pago) e o Render **não tem saída IPv6**: com ela o primeiro boot falha mesmo com as
+   > credenciais certas. O host do pooler varia por projeto/região (`aws-0-…`, `aws-1-…`)
+   > — copie do dashboard, não deste guia.
 
    ```
    postgresql://postgres.<ref>:<SENHA>@aws-0-sa-east-1.pooler.supabase.com:5432/postgres
@@ -56,10 +61,17 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO conliz_app;
 
 1. Abra o blueprint: https://render.com/deploy?repo=https://github.com/tgsf18/conliz
    (ou **New → Blueprint** apontando para o repositório — o `render.yaml` cria o serviço `conliz`).
-2. Preencha as variáveis marcadas `sync: false`:
+2. Preencha as variáveis marcadas `sync: false` no painel do Render:
    - `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`
-3. `JWT_SECRET` e `CONLIZ_ADMIN_PASSWORD` são gerados pelo Render. **Copie o valor de `CONLIZ_ADMIN_PASSWORD`** nos Environment Variables — é a senha do primeiro login (`admin@conliz.com.br`).
-4. Confirme o healthcheck: `https://conliz.onrender.com/actuator/health` → `{"status":"UP"}`.
+   - `CONLIZ_ADMIN_PASSWORD` — **você define** uma senha forte. É a senha do primeiro
+     login (`admin@conliz.com.br`). Não é gerada pelo Render de propósito: se o serviço
+     for recriado, uma senha nova não substituiria a do usuário que já existe no banco.
+   - `CORS_ALLOWED_ORIGINS` e `FRONTEND_URL` — a URL real do serviço (o Render sufixa o
+     nome quando já existe) ou o domínio próprio.
+   `JWT_SECRET` é gerado pelo Render.
+3. Usuários de demonstração (`rh@`, `comercial@`, `engenharia@`) ficam desligados em
+   produção (`CONLIZ_SEED_DEMO_USERS=false`); só existem no perfil local.
+4. Confirme o healthcheck: `https://<sua-url>.onrender.com/actuator/health` → `{"status":"UP"}`.
 
 Pronto: `https://conliz.onrender.com/` é o site e `https://conliz.onrender.com/gestao-conliz-acesso` é o login do painel.
 
@@ -69,7 +81,8 @@ Pronto: `https://conliz.onrender.com/` é o site e `https://conliz.onrender.com/
 
 - [ ] `/actuator/health` responde `UP`
 - [ ] Login em `/gestao-conliz-acesso` com `admin@conliz.com.br` + senha gerada
-- [ ] 2FA configurado no primeiro acesso (QR + códigos de recuperação)
+- [ ] 2FA: hoje só é possível configurar pela API (`POST /api/auth/2fa/setup` no
+      Swagger); não há tela no painel. Não bloqueia o login.
 - [ ] `/admin/dashboard`, `/admin/contratos`, `/admin/financeiro`, `/admin/rh` carregam dados
 - [ ] Criação de orçamento e geração de PDF funcionam
 - [ ] Domínio próprio (opcional): **Settings → Custom Domain**; depois atualize `CORS_ALLOWED_ORIGINS` e `FRONTEND_URL`

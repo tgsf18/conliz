@@ -27,6 +27,14 @@ public class InitialAdminConfig implements CommandLineRunner {
     @Value("${conliz.admin.name:Diretoria Conliz}")
     private String adminName;
 
+    /**
+     * Usuários de demonstração por departamento (rh@, comercial@, engenharia@).
+     * Ficam desligados por padrão: em produção eles seriam três contas privilegiadas
+     * com a mesma senha do admin. Só o perfil local liga este seed.
+     */
+    @Value("${conliz.admin.seed-demo-users:false}")
+    private boolean seedDemoUsers;
+
     public InitialAdminConfig(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -52,6 +60,12 @@ public class InitialAdminConfig implements CommandLineRunner {
         }
 
         // 2. Provision department users for role testing if they don't exist
+        //    (somente com conliz.admin.seed-demo-users=true, ex.: perfil local)
+        if (!seedDemoUsers) {
+            log.info("Seed de usuários de demonstração desligado (conliz.admin.seed-demo-users=false).");
+            return;
+        }
+
         provisionRoleUserIfNotExists("RH Conliz", "rh@conliz.com.br", adminPassword, Role.RH);
         provisionRoleUserIfNotExists("Comercial Conliz", "comercial@conliz.com.br", adminPassword, Role.COMERCIAL);
         provisionRoleUserIfNotExists("Engenharia Conliz", "engenharia@conliz.com.br", adminPassword, Role.ENGENHARIA);

@@ -4,7 +4,8 @@
 **/node_modules
 **/.next
 **/out
-frontend/scripts
+# NÃO ignore frontend/scripts: o `npm run build` chama scripts/copy-static.mjs
+# (mesmo com --skip-copy, o arquivo precisa existir dentro da imagem).
 backend/target
 **/*.log
 .env

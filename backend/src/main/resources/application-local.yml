@@ -1,0 +1,5 @@
+# Perfil de desenvolvimento local (H2 em memória).
+# Único perfil que liga os usuários de demonstração por departamento.
+conliz:
+  admin:
+    seed-demo-users: ${CONLIZ_SEED_DEMO_USERS:true}

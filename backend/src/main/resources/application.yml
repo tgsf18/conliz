@@ -48,6 +48,8 @@ conliz:
     email: ${CONLIZ_ADMIN_EMAIL:admin@conliz.com.br}
     password: ${CONLIZ_ADMIN_PASSWORD:}
     name: ${CONLIZ_ADMIN_NAME:Diretoria Conliz}
+    # Cria rh@/comercial@/engenharia@ com a senha do admin. Só para demonstração local.
+    seed-demo-users: ${CONLIZ_SEED_DEMO_USERS:false}
   totp:
     issuer: ${TOTP_ISSUER:Conliz Construtora}
   cors:

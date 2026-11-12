@@ -4,13 +4,16 @@ Plataforma da Conliz Construtora: site público em Next.js 14 e API Spring Boot 
 
 ## O que sobe junto
 
-| Parte | Stack | Porta local |
+Um único serviço: o Next é exportado como HTML/CSS/JS estático (`output: "export"`) e
+embutido no jar do Spring Boot, que serve site, painel e API na **mesma porta**.
+
+| Parte | Stack | Porta |
 | --- | --- | --- |
-| Frontend | Next.js 14, Tailwind | 3000 |
-| Backend | Spring Boot 3.3, Java 21 | 8080 |
+| Site + painel + API | Spring Boot 3.3 (Java 21) com o export do Next.js 14 embutido | 8080 |
 | Banco | PostgreSQL 17 (Docker) ou H2 em memória no perfil local | 5432 |
 
-O frontend encaminha `/api/*` para o backend (`BACKEND_INTERNAL_URL`, padrão `http://localhost:8080`).
+Em produção não existe processo Node, proxy nem porta 3000. No desenvolvimento o
+`npm run dev` sobe o Next na 3000 apenas para hot reload, chamando `/api` no próprio host.
 
 ## Subir com Docker
 
@@ -20,14 +23,21 @@ cp .env.example .env
 docker compose up --build
 ```
 
-- Site: http://localhost:3000
-- Login do painel: http://localhost:3000/gestao-conliz-acesso
+- Site: http://localhost:8080
+- Login do painel: http://localhost:8080/gestao-conliz-acesso
 - Swagger: http://localhost:8080/swagger-ui.html
 - Saúde: http://localhost:8080/actuator/health
 
+A imagem é construída por `backend/Dockerfile` (contexto = raiz do repositório):
+estágio Node exporta o Next, estágio Maven embute o `out/` em `resources/static` e o
+runtime é só a JRE com o jar.
+
 O Flyway aplica `backend/src/main/resources/db/migration` na subida do backend (perfil `docker` também aplica `migration-postgresql`). Não é preciso rodar `mvn flyway:migrate` à parte se o container sobe com o Postgres saudável.
 
-Sem `CONLIZ_ADMIN_PASSWORD`, o backend não cria o usuário inicial.
+Sem `CONLIZ_ADMIN_PASSWORD`, o backend não cria o usuário inicial. Os usuários de
+demonstração por departamento (`rh@`, `comercial@`, `engenharia@`) só são criados com
+`CONLIZ_SEED_DEMO_USERS=true` — ligado por padrão **apenas** no perfil `local`
+(`application-local.yml`). Em produção ficam desligados.
 
 ## Desenvolvimento sem Docker
 
@@ -53,6 +63,11 @@ mvn -B -f backend/pom.xml test
 cd frontend && npm test && npx tsc --noEmit && npm run build
 ```
 
+`FlywayMigrationTest` sobe o contexto com o Flyway **ligado** num H2 em modo PostgreSQL:
+as migrations V1→V4 precisam aplicar e o Hibernate valida o schema resultante. É o que
+impede um SQL inválido (UUID malformado, coluna inexistente) de só aparecer no primeiro
+boot de produção — o perfil `test` normal usa `ddl-auto: create-drop` e não roda Flyway.
+
 ## Autenticação
 
 - `POST /api/auth/login` — senha com BCrypt; se o 2FA estiver ativo, devolve desafio sem cookie de sessão.
@@ -61,6 +76,11 @@ cd frontend && npm test && npx tsc --noEmit && npm run build
 - `GET /api/auth/me`, `POST /api/auth/refresh`, `POST /api/auth/logout`.
 
 Sessão em cookies (`conliz_access_token`, refresh e CSRF). `ROLE_ADMIN` implica `COMERCIAL`, `ENGENHARIA` e `RH` no `@PreAuthorize`.
+
+O cookie `XSRF-TOKEN` (double-submit, legível pelo JS) usa os **mesmos atributos** dos
+cookies de sessão: `Secure` quando `COOKIE_SECURE=true`, `SameSite` de `COOKIE_SAME_SITE`
+e domínio de `COOKIE_DOMAIN`. Sem isso, em HTTPS o POST/PATCH autenticado do painel
+voltava 403.
 
 O emissor do TOTP vem de `TOTP_ISSUER`.
 

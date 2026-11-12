@@ -53,6 +53,15 @@ public class SecurityConfig {
     @Value("${conliz.cors.allowed-origins:http://localhost:3000,http://127.0.0.1:3000}")
     private String allowedOrigins;
 
+    @Value("${conliz.cookie.secure:false}")
+    private boolean cookieSecure;
+
+    @Value("${conliz.cookie.same-site:Strict}")
+    private String cookieSameSite;
+
+    @Value("${conliz.cookie.domain:}")
+    private String cookieDomain;
+
     public SecurityConfig(
             JwtService jwtService,
             UserService userService,
@@ -103,8 +112,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
             // 3. CSRF Double-Submit Cookie
+            // O repositório padrão emite XSRF-TOKEN sem Secure/SameSite. Em HTTPS (Render)
+            // isso divergia dos cookies de sessão do CookieService e derrubava os POST/PATCH
+            // autenticados com 403. Aqui os atributos são os mesmos dos demais cookies.
             .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrfTokenRepository(csrfTokenRepository())
                 .csrfTokenRequestHandler(requestHandler)
                 .ignoringRequestMatchers(
                         "/api/auth/login",
@@ -158,6 +170,24 @@ public class SecurityConfig {
             .addFilterAfter(new CsrfCookieFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    /**
+     * Repositório do token CSRF (double-submit): cookie legível pelo JS, com os mesmos
+     * atributos dos cookies de sessão (Secure em HTTPS, SameSite e domínio configuráveis).
+     */
+    @Bean
+    public CookieCsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        repository.setCookieCustomizer(builder -> {
+            builder.path("/")
+                    .secure(cookieSecure)
+                    .sameSite(cookieSameSite);
+            if (cookieDomain != null && !cookieDomain.isBlank()) {
+                builder.domain(cookieDomain);
+            }
+        });
+        return repository;
     }
 
     @Bean

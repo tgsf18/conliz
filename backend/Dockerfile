@@ -15,6 +15,10 @@ WORKDIR /web
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
 COPY frontend/ ./
+# O `npm run build` chama scripts/copy-static.mjs. Se a pasta não vier no contexto
+# (por exemplo por uma regra no .dockerignore), criamos um stub: com --skip-copy o
+# script só precisa existir para o Node carregar — não faz nada.
+RUN mkdir -p /web/scripts && { [ -f /web/scripts/copy-static.mjs ] || printf 'console.log("[copy-static] stub: nada a copiar");\n' > /web/scripts/copy-static.mjs; }
 # A exportação é gerada sem depender da API: as páginas caem no conteúdo de fallback.
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build -- --skip-copy

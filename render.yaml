@@ -13,7 +13,8 @@ services:
     name: conliz
     runtime: docker
     plan: free
-    region: oregon
+    # Região do Render não muda depois de criada. O Supabase ficará em São Paulo
+    # (sa-east-1): escolha a região mais próxima ao criar o serviço.
     dockerfilePath: ./backend/Dockerfile
     dockerContext: .
     healthCheckPath: /actuator/health
@@ -28,11 +29,15 @@ services:
         sync: false
       - key: SPRING_DATASOURCE_PASSWORD
         sync: false
-      # --- Segredos (gerados pelo Render) ---
+      # --- Segredos ---
+      # JWT_SECRET: gerado pelo Render (nunca fica no repositório).
       - key: JWT_SECRET
         generateValue: true
+      # Senha de bootstrap do admin: você define no painel (sync: false).
+      # Não use generateValue: se o serviço for recriado, a senha nova não substitui
+      # a do usuário que já existe no banco e você perde o acesso ao painel.
       - key: CONLIZ_ADMIN_PASSWORD
-        generateValue: true
+        sync: false
       - key: CONLIZ_ADMIN_EMAIL
         value: admin@conliz.com.br
       - key: CONLIZ_ADMIN_NAME
@@ -46,7 +51,13 @@ services:
       # Site e API no mesmo domínio: CORS só importa para um domínio próprio.
       - key: COOKIE_SECURE
         value: "true"
+      # Sem usuários de demonstração (rh@/comercial@/engenharia@) em produção.
+      - key: CONLIZ_SEED_DEMO_USERS
+        value: "false"
+      # URL do serviço: o Render injeta RENDER_EXTERNAL_URL (a URL real, já com o
+      # sufixo se o nome estiver em uso). Assim CORS/FRONTEND_URL nunca ficam errados.
+      # Com domínio próprio, troque por https://seudominio.com.br (sync: false).
       - key: CORS_ALLOWED_ORIGINS
-        value: https://conliz.onrender.com
+        value: ${RENDER_EXTERNAL_URL}
       - key: FRONTEND_URL
-        value: https://conliz.onrender.com
+        value: ${RENDER_EXTERNAL_URL}
