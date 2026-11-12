@@ -1,7 +1,7 @@
 "use client";
 
 import { apiFetch } from "@/lib/http.mjs";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -16,7 +16,6 @@ import {
   LogOut,
   ChevronRight,
   ShieldCheck,
-  Building,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -51,18 +50,18 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-maison-hairline flex flex-col justify-between shrink-0 h-screen sticky top-0 overflow-y-auto">
+    <aside className="w-64 bg-conliz-navy border-r border-conliz-navyLight flex flex-col justify-between shrink-0 h-screen sticky top-0 overflow-y-auto">
       {/* Brand Header */}
       <div>
-        <div className="p-6 border-b border-maison-hairline flex items-center gap-3">
-          <div className="w-8 h-8 bg-maison-charcoal text-white flex items-center justify-center font-serif text-lg font-bold">
+        <div className="p-6 border-b border-conliz-navyLight flex items-center gap-3">
+          <div className="w-8 h-8 bg-conliz-gold text-conliz-navy flex items-center justify-center font-serif text-lg font-bold">
             C
           </div>
           <div>
-            <span className="font-serif text-xl font-bold tracking-tight text-maison-charcoal leading-none block">
+            <span className="font-serif text-xl font-bold tracking-tight text-white leading-none block">
               CONLIZ
             </span>
-            <span className="font-sans text-[9px] tracking-editorial uppercase text-maison-terracotta font-semibold">
+            <span className="font-sans text-[9px] tracking-[0.18em] uppercase text-conliz-gold font-semibold">
               Painel de Gestão
             </span>
           </div>
@@ -80,15 +79,15 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
                 href={item.href}
                 className={`flex items-center justify-between px-3.5 py-2.5 text-xs font-sans tracking-wide transition-colors ${
                   isActive
-                    ? "bg-maison-linen text-maison-terracotta font-bold border-l-2 border-maison-terracotta"
-                    : "text-maison-charcoal hover:bg-maison-cream hover:text-maison-terracotta"
+                    ? "bg-conliz-navyLight text-conliz-gold font-bold border-l-2 border-conliz-gold"
+                    : "text-white/80 hover:bg-conliz-navyLight/60 hover:text-conliz-gold"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={`w-4 h-4 ${isActive ? "text-maison-terracotta" : "text-maison-muted"}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? "text-conliz-gold" : "text-white/50"}`} />
                   <span>{item.name}</span>
                 </div>
-                {isActive && <ChevronRight className="w-3.5 h-3.5 text-maison-terracotta" />}
+                {isActive && <ChevronRight className="w-3.5 h-3.5 text-conliz-gold" />}
               </Link>
             );
           })}
@@ -96,23 +95,23 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
       </div>
 
       {/* User Footer & Logout */}
-      <div className="p-4 border-t border-maison-hairline bg-maison-cream/40 space-y-3">
+      <div className="p-4 border-t border-conliz-navyLight bg-conliz-navyDark/40 space-y-3">
         <div className="flex items-center gap-3 px-2">
-          <div className="w-8 h-8 rounded-full bg-maison-linen border border-maison-hairline flex items-center justify-center font-bold text-xs text-maison-charcoal">
+          <div className="w-8 h-8 rounded-full bg-conliz-gold text-conliz-navy flex items-center justify-center font-bold text-xs">
             {user?.nome ? user.nome.charAt(0).toUpperCase() : "U"}
           </div>
           <div className="overflow-hidden">
-            <p className="text-xs font-semibold text-maison-charcoal truncate">{user?.nome || "Diretoria Conliz"}</p>
+            <p className="text-xs font-semibold text-white truncate">{user?.nome || "Diretoria Conliz"}</p>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="text-[9px] font-sans tracking-widest uppercase px-1.5 py-0.5 bg-maison-terracotta/10 text-maison-terracotta font-bold">
+              <span className="text-[9px] font-sans tracking-widest uppercase px-1.5 py-0.5 bg-conliz-gold/20 text-conliz-gold font-bold">
                 {user?.role || "ADMIN"}
               </span>
               {user?.twoFactorEnabled ? (
-                <span className="text-[9px] text-emerald-700 font-medium flex items-center gap-0.5">
+                <span className="text-[9px] text-emerald-400 font-medium flex items-center gap-0.5">
                   <ShieldCheck className="w-2.5 h-2.5" /> 2FA
                 </span>
               ) : (
-                <span className="text-[9px] text-amber-700 font-medium">2FA Pendente</span>
+                <span className="text-[9px] text-amber-400 font-medium">2FA Pendente</span>
               )}
             </div>
           </div>
@@ -120,7 +119,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-sans tracking-widest uppercase font-semibold text-rose-700 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-sans tracking-widest uppercase font-semibold text-rose-300 hover:bg-rose-500/10 border border-transparent hover:border-rose-400/30 transition-colors"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Encerrar Sessão</span>
