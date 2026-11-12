@@ -22,16 +22,29 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // Maison Aesthetic Tokens (Warm Scandinavian / Japandi Editorial)
+        // Conliz Official Palette (Navy + Gold)
+        conliz: {
+          navy: "#0A2540",          // Azul oficial profundo
+          navyLight: "#0F3460",     // Azul um pouco mais claro
+          navyDark: "#061828",      // Quase preto azul
+          gold: "#C9A227",          // Dourado oficial
+          goldHover: "#B8911F",     // Dourado hover
+          goldLight: "#E8D48B",     // Dourado claro
+          cream: "#F8F6F2",         // Fundo claro
+          slate: "#F1F3F5",         // Alternativa clara
+          muted: "#6B7C8F",         // Texto secundário
+          charcoal: "#1A2332",      // Texto principal escuro
+        },
+        // Mantém aliases antigos temporariamente para não quebrar tudo de uma vez
         maison: {
-          cream: "#FAF8F5",       // Fundo creme
-          linen: "#F3ECE2",       // Faixas de seção em linho
-          charcoal: "#2A2622",    // Texto principal carvão
-          muted: "#7C736A",       // Texto secundário
-          terracotta: "#A65E3F",  // Acento terracota (botões primários e rótulos)
-          hairline: "#E4DED8",    // Bordas hairline
-          sand: "#EFE8DF",
-          terracottaHover: "#8E4E33",
+          cream: "#F8F6F2",
+          linen: "#F1F3F5",
+          charcoal: "#1A2332",
+          muted: "#6B7C8F",
+          terracotta: "#C9A227",    // agora aponta para gold
+          hairline: "#E2E6EB",
+          sand: "#E8D48B",
+          terracottaHover: "#B8911F",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
