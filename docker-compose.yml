@@ -23,8 +23,9 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      # Imagem única: o Dockerfile monta o site/painel e embute no jar
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: conliz-backend
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
@@ -51,25 +52,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    restart: unless-stopped
-    networks:
-      - conliz-network
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: conliz-frontend
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      ADMIN_LOGIN_PATH: ${ADMIN_LOGIN_PATH:-/gestao-conliz-acesso}
-      BACKEND_INTERNAL_URL: http://backend:8080
-    ports:
-      - "${FRONTEND_PORT:-3000}:3000"
-    depends_on:
-      backend:
-        condition: service_healthy
     restart: unless-stopped
     networks:
       - conliz-network

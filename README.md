@@ -72,7 +72,13 @@ O `JWT_SECRET` padrão do `application.yml` existe para o perfil local. Em Docke
 
 ## Deploy em produção
 
-Banco no **Supabase** (Postgres) + API e site no **Render** (Docker), em dois serviços criados por blueprint. Guia completo em [DEPLOY.md](DEPLOY.md); o `render.yaml` na raiz já traz healthcheck, segredos gerados e as variáveis do Supabase.
+Banco no **Supabase** (Postgres) + **um único serviço no Render** (Docker): o build do Next é exportado estático e embutido no jar do Spring Boot, então site, painel e API compartilham o mesmo domínio e a mesma porta — sem segundo serviço, sem proxy e sem CORS entre processos. Guia completo em [DEPLOY.md](DEPLOY.md); o `render.yaml` na raiz já traz healthcheck, segredos gerados e as variáveis do Supabase.
+
+```bash
+# atualizar o site/painel servido pela API
+cd frontend && npm run build   # exporta out/ e copia para backend/src/main/resources/static
+cd ../backend && mvn package
+```
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/tgsf18/conliz)
 

@@ -96,6 +96,27 @@ async function getObra(slug: string) {
   };
 }
 
+export const dynamicParams = false;
+
+// Exportação estática: as rotas são geradas no build a partir da API pública.
+export async function generateStaticParams() {
+  const slugs = new Set<string>([
+    "residencia-alphaville-nova-esplanada",
+    "retrofit-hall-social-saint-paul",
+  ]);
+  try {
+    const backendUrl = process.env.BACKEND_INTERNAL_URL || "http://localhost:8080";
+    const res = await fetch(`${backendUrl}/api/public/obras`, { cache: "no-store" });
+    if (res.ok) {
+      const obras = await res.json();
+      for (const obra of obras) {
+        if (obra?.slug) slugs.add(obra.slug);
+      }
+    }
+  } catch (error) {}
+  return Array.from(slugs).map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const obra = await getObra(params.slug);
   if (!obra) return { title: "Obra não encontrada" };

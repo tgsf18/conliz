@@ -1,0 +1,8 @@
+User-Agent: *
+Allow: /
+Disallow: /gestao-conliz-acesso
+Disallow: /admin
+Disallow: /api/admin/
+Disallow: /gestao-conliz-acesso
+
+Sitemap: https://conliz.com.br/sitemap.xml

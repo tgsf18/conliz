@@ -1,0 +1,14 @@
+# Contexto de build = raiz do repositório (imagem única com site + API)
+.git
+.github
+**/node_modules
+**/.next
+**/out
+frontend/scripts
+backend/target
+**/*.log
+.env
+.env.*
+!.env.example
+README.md
+DEPLOY.md
