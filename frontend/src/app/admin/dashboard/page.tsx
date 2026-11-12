@@ -9,25 +9,16 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
-  PieChart,
-  Pie,
   Cell,
-  LineChart,
-  Line,
 } from "recharts";
 import {
   DollarSign,
   TrendingUp,
   FileSpreadsheet,
-  Building,
   Users,
-  AlertCircle,
   Calendar,
-  CheckCircle2,
   Clock,
-  ArrowUpRight,
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
@@ -43,7 +34,7 @@ export default function AdminDashboardPage() {
         const json = await res.json();
         setData(json);
       }
-    } catch (e) {
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -53,17 +44,19 @@ export default function AdminDashboardPage() {
     fetchDashboard();
   }, [periodo]);
 
-  const COLORS = ["#A65E3F", "#2A2622", "#D8D0C7", "#7C736A", "#C28568", "#E4DED8"];
+  // Navy / slate palette for charts
+  const COLORS = ["#0A2540", "#1E3A5F", "#334155", "#64748B", "#94A3B8", "#CBD5E1"];
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(val || 0);
-  };
+  const formatCurrency = (val: number) =>
+    new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(val || 0);
 
   if (loading && !data) {
     return (
       <div className="py-20 text-center">
-        <div className="w-8 h-8 border-2 border-maison-terracotta border-t-transparent rounded-full animate-spin mx-auto" />
-        <p className="mt-3 text-xs font-sans tracking-widest uppercase text-maison-muted">Carregando métricas...</p>
+        <div className="w-8 h-8 border-2 border-[#0A2540] border-t-transparent rounded-full animate-spin mx-auto" />
+        <p className="mt-3 text-xs font-sans tracking-widest uppercase text-conliz-muted">
+          Carregando métricas...
+        </p>
       </div>
     );
   }
@@ -85,22 +78,22 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="space-y-8">
-      
-      {/* Top Title & Period Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-maison-hairline pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-conliz-slate pb-4">
         <div>
-          <span className="editorial-sub block mb-1">Painel Gerencial</span>
-          <h1 className="text-3xl font-serif text-maison-charcoal font-bold">
+          <span className="text-[11px] tracking-[0.16em] uppercase text-conliz-muted font-semibold block mb-1">
+            Painel Gerencial
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-sans font-semibold text-conliz-charcoal">
             Visão Geral Executiva
           </h1>
         </div>
 
         <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-maison-muted" />
+          <Calendar className="w-4 h-4 text-conliz-muted" />
           <select
             value={periodo}
             onChange={(e) => setPeriodo(e.target.value)}
-            className="px-3 py-1.5 bg-white border border-maison-hairline text-xs font-sans text-maison-charcoal focus:outline-none focus:border-maison-terracotta"
+            className="px-3 py-1.5 bg-white border border-conliz-slate text-xs font-sans text-conliz-charcoal focus:outline-none focus:border-[#0A2540]"
           >
             <option value="ESTE_MES">Mês Atual</option>
             <option value="ULTIMOS_90_DIAS">Últimos 90 Dias</option>
@@ -109,139 +102,127 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        {/* Card 1: Orçamentos */}
-        <div className="bg-white p-5 border border-maison-hairline shadow-sm space-y-2">
+        <div className="bg-white p-5 border border-conliz-slate space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-sans tracking-widest uppercase text-maison-muted font-bold">
+            <span className="text-[11px] tracking-widest uppercase text-conliz-muted font-semibold">
               Orçamentos Totais
             </span>
-            <FileSpreadsheet className="w-4 h-4 text-maison-terracotta" />
+            <FileSpreadsheet className="w-4 h-4 text-[#0A2540]" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-serif font-bold text-maison-charcoal">
+            <span className="text-3xl font-sans font-semibold text-conliz-charcoal">
               {orcamentos.total || 0}
             </span>
-            <span className="text-xs font-sans text-emerald-700 font-semibold">
+            <span className="text-xs text-emerald-700 font-semibold">
               {orcamentos.taxaConversao}% conv.
             </span>
           </div>
-          <p className="text-[11px] font-sans text-maison-muted">
-            {orcamentos.novos || 0} aguardando análise técnica
+          <p className="text-[11px] text-conliz-muted">
+            {orcamentos.novos || 0} aguardando análise
           </p>
         </div>
 
-        {/* Card 2: Receita Realizada */}
-        <div className="bg-white p-5 border border-maison-hairline shadow-sm space-y-2">
+        <div className="bg-white p-5 border border-conliz-slate space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-sans tracking-widest uppercase text-maison-muted font-bold">
+            <span className="text-[11px] tracking-widest uppercase text-conliz-muted font-semibold">
               Receitas Realizadas
             </span>
             <DollarSign className="w-4 h-4 text-emerald-600" />
           </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-serif font-bold text-maison-charcoal">
-              {formatCurrency(financeiro.receitaPaga || 143500)}
-            </span>
-          </div>
-          <p className="text-[11px] font-sans text-maison-muted">
+          <span className="text-2xl font-sans font-semibold text-conliz-charcoal block">
+            {formatCurrency(financeiro.receitaPaga || 143500)}
+          </span>
+          <p className="text-[11px] text-conliz-muted">
             + {formatCurrency(financeiro.receitaPendente || 58500)} a faturar
           </p>
         </div>
 
-        {/* Card 3: Despesas & Custos */}
-        <div className="bg-white p-5 border border-maison-hairline shadow-sm space-y-2">
+        <div className="bg-white p-5 border border-conliz-slate space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-sans tracking-widest uppercase text-maison-muted font-bold">
+            <span className="text-[11px] tracking-widest uppercase text-conliz-muted font-semibold">
               Despesas Operacionais
             </span>
             <TrendingUp className="w-4 h-4 text-amber-600" />
           </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-serif font-bold text-maison-charcoal">
-              {formatCurrency(financeiro.despesaPaga || 46900)}
-            </span>
-          </div>
-          <p className="text-[11px] font-sans text-maison-muted">
+          <span className="text-2xl font-sans font-semibold text-conliz-charcoal block">
+            {formatCurrency(financeiro.despesaPaga || 46900)}
+          </span>
+          <p className="text-[11px] text-conliz-muted">
             {formatCurrency(financeiro.despesaPendente || 18400)} a vencer
           </p>
         </div>
 
-        {/* Card 4: Headcount & Obras */}
-        <div className="bg-white p-5 border border-maison-hairline shadow-sm space-y-2">
+        <div className="bg-white p-5 border border-conliz-slate space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-sans tracking-widest uppercase text-maison-muted font-bold">
-              Equipe Ativa & Obras
+            <span className="text-[11px] tracking-widest uppercase text-conliz-muted font-semibold">
+              Equipe Ativa
             </span>
-            <Users className="w-4 h-4 text-maison-charcoal" />
+            <Users className="w-4 h-4 text-[#0A2540]" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-serif font-bold text-maison-charcoal">
+            <span className="text-3xl font-sans font-semibold text-conliz-charcoal">
               {data?.headcountTotal || 23}
             </span>
-            <span className="text-xs font-sans text-maison-muted font-medium">colaboradores</span>
+            <span className="text-xs text-conliz-muted">colaboradores</span>
           </div>
-          <p className="text-[11px] font-sans text-maison-muted">
+          <p className="text-[11px] text-conliz-muted">
             {data?.totalContratosVigentes || 2} contratos vigentes
           </p>
         </div>
       </div>
 
-      {/* Charts Row 1: Fluxo de Caixa Mensal + Funil de Orçamentos */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Fluxo de Caixa (8 cols) */}
-        <div className="lg:col-span-7 bg-white p-6 border border-maison-hairline shadow-sm space-y-4">
-          <div className="flex items-center justify-between border-b border-maison-hairline pb-3">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-7 bg-white p-5 sm:p-6 border border-conliz-slate space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-conliz-slate pb-3">
             <div>
-              <h3 className="font-serif text-lg font-bold text-maison-charcoal">
-                Fluxo de Caixa Mensal (R$)
+              <h3 className="font-sans text-base font-semibold text-conliz-charcoal">
+                Fluxo de Caixa Mensal
               </h3>
-              <p className="text-[11px] font-sans text-maison-muted">Receitas faturadas vs custos de obras e operação</p>
+              <p className="text-[11px] text-conliz-muted">Receitas vs despesas</p>
             </div>
-            <div className="flex items-center gap-4 text-xs font-sans">
-              <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#A65E3F] inline-block" /> Receita</span>
-              <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#2A2622] inline-block" /> Despesa</span>
+            <div className="flex items-center gap-4 text-xs">
+              <span className="flex items-center gap-1.5">
+                <span className="w-3 h-3 bg-[#0A2540] inline-block" /> Receita
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-3 h-3 bg-[#94A3B8] inline-block" /> Despesa
+              </span>
             </div>
           </div>
-
-          <div className="h-72 w-full">
+          <div className="h-64 sm:h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={fluxoCaixa} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E4DED8" />
-                <XAxis dataKey="mes" stroke="#7C736A" fontSize={11} />
-                <YAxis stroke="#7C736A" fontSize={11} tickFormatter={(v) => `R$${v / 1000}k`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <XAxis dataKey="mes" stroke="#64748B" fontSize={11} />
+                <YAxis stroke="#64748B" fontSize={11} tickFormatter={(v) => `R$${v / 1000}k`} />
                 <Tooltip
                   formatter={(val: any) => formatCurrency(Number(val))}
-                  contentStyle={{ backgroundColor: "#FAF8F5", borderColor: "#E4DED8", fontSize: "12px" }}
+                  contentStyle={{ backgroundColor: "#fff", borderColor: "#E2E8F0", fontSize: "12px" }}
                 />
-                <Bar dataKey="receita" fill="#A65E3F" name="Receita" />
-                <Bar dataKey="despesa" fill="#2A2622" name="Despesa" />
+                <Bar dataKey="receita" fill="#0A2540" name="Receita" />
+                <Bar dataKey="despesa" fill="#94A3B8" name="Despesa" />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Funil de Orçamentos (5 cols) */}
-        <div className="lg:col-span-5 bg-white p-6 border border-maison-hairline shadow-sm space-y-4">
-          <div className="border-b border-maison-hairline pb-3">
-            <h3 className="font-serif text-lg font-bold text-maison-charcoal">
-              Funil Comercial de Orçamentos
+        <div className="lg:col-span-5 bg-white p-5 sm:p-6 border border-conliz-slate space-y-4">
+          <div className="border-b border-conliz-slate pb-3">
+            <h3 className="font-sans text-base font-semibold text-conliz-charcoal">
+              Funil de Orçamentos
             </h3>
-            <p className="text-[11px] font-sans text-maison-muted">Pipeline de propostas em andamento</p>
+            <p className="text-[11px] text-conliz-muted">Pipeline comercial</p>
           </div>
-
-          <div className="h-72 w-full">
+          <div className="h-64 sm:h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={funilChartData} layout="vertical" margin={{ top: 10, right: 20, left: 20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E4DED8" />
-                <XAxis type="number" stroke="#7C736A" fontSize={11} />
-                <YAxis dataKey="status" type="category" stroke="#7C736A" fontSize={11} />
-                <Tooltip contentStyle={{ backgroundColor: "#FAF8F5", borderColor: "#E4DED8", fontSize: "12px" }} />
-                <Bar dataKey="total" fill="#A65E3F">
-                  {funilChartData.map((entry, index) => (
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <XAxis type="number" stroke="#64748B" fontSize={11} />
+                <YAxis dataKey="status" type="category" stroke="#64748B" fontSize={11} width={80} />
+                <Tooltip contentStyle={{ backgroundColor: "#fff", borderColor: "#E2E8F0", fontSize: "12px" }} />
+                <Bar dataKey="total" fill="#0A2540">
+                  {funilChartData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Bar>
@@ -251,109 +232,91 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Charts Row 2: Receita x Custo por Obra + Obras por Fase */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Receita x Custo por Obra (7 cols) */}
-        <div className="lg:col-span-7 bg-white p-6 border border-maison-hairline shadow-sm space-y-4">
-          <div className="border-b border-maison-hairline pb-3">
-            <h3 className="font-serif text-lg font-bold text-maison-charcoal">
-              Rentabilidade & Margem por Empreendimento
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-7 bg-white p-5 sm:p-6 border border-conliz-slate space-y-4">
+          <div className="border-b border-conliz-slate pb-3">
+            <h3 className="font-sans text-base font-semibold text-conliz-charcoal">
+              Rentabilidade por Obra
             </h3>
-            <p className="text-[11px] font-sans text-maison-muted">Contratos em execução na região de Sorocaba</p>
+            <p className="text-[11px] text-conliz-muted">Receita contratada vs custo</p>
           </div>
-
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={receitaCusto} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E4DED8" />
-                <XAxis dataKey="obra" stroke="#7C736A" fontSize={11} />
-                <YAxis stroke="#7C736A" fontSize={11} tickFormatter={(v) => `R$${v / 1000}k`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <XAxis dataKey="obra" stroke="#64748B" fontSize={11} />
+                <YAxis stroke="#64748B" fontSize={11} tickFormatter={(v) => `R$${v / 1000}k`} />
                 <Tooltip
                   formatter={(val: any) => formatCurrency(Number(val))}
-                  contentStyle={{ backgroundColor: "#FAF8F5", borderColor: "#E4DED8", fontSize: "12px" }}
+                  contentStyle={{ backgroundColor: "#fff", borderColor: "#E2E8F0", fontSize: "12px" }}
                 />
-                <Bar dataKey="receita" fill="#A65E3F" name="Receita Contratada" />
-                <Bar dataKey="custo" fill="#2A2622" name="Custo Realizado" />
+                <Bar dataKey="receita" fill="#0A2540" name="Receita" />
+                <Bar dataKey="custo" fill="#94A3B8" name="Custo" />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Obras por Fase (5 cols) */}
-        <div className="lg:col-span-5 bg-white p-6 border border-maison-hairline shadow-sm space-y-4">
-          <div className="border-b border-maison-hairline pb-3">
-            <h3 className="font-serif text-lg font-bold text-maison-charcoal">
-              Distribuição por Fase Construtiva
+        <div className="lg:col-span-5 bg-white p-5 sm:p-6 border border-conliz-slate space-y-4">
+          <div className="border-b border-conliz-slate pb-3">
+            <h3 className="font-sans text-base font-semibold text-conliz-charcoal">
+              Obras por Fase
             </h3>
-            <p className="text-[11px] font-sans text-maison-muted">Canteiros ativos e estágios de execução</p>
+            <p className="text-[11px] text-conliz-muted">Canteiros ativos</p>
           </div>
-
           <div className="space-y-3 pt-2">
-            {obrasPorFase.map((item: any, i: number) => {
-              const maxObras = 6;
-              const pct = Math.min(100, (Number(item.quantidade) / maxObras) * 100);
+            {obrasPorFase.map((item: any) => {
+              const pct = Math.min(100, (Number(item.quantidade) / 6) * 100);
               return (
                 <div key={item.fase} className="space-y-1">
-                  <div className="flex justify-between text-xs font-sans">
-                    <span className="font-semibold text-maison-charcoal">{item.fase}</span>
-                    <span className="text-maison-muted">{item.quantidade} obra(s)</span>
+                  <div className="flex justify-between text-xs">
+                    <span className="font-semibold text-conliz-charcoal">{item.fase}</span>
+                    <span className="text-conliz-muted">{item.quantidade}</span>
                   </div>
-                  <div className="w-full h-2 bg-maison-linen overflow-hidden">
-                    <div
-                      className="h-full bg-maison-terracotta"
-                      style={{ width: `${Math.max(10, pct)}%` }}
-                    />
+                  <div className="w-full h-2 bg-conliz-slate overflow-hidden">
+                    <div className="h-full bg-[#0A2540]" style={{ width: `${Math.max(8, pct)}%` }} />
                   </div>
                 </div>
               );
             })}
+            {obrasPorFase.length === 0 && (
+              <p className="text-sm text-conliz-muted py-6 text-center">Sem dados de fase no período.</p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Row 3: Contratos Próximos do Vencimento */}
-      <div className="bg-white p-6 border border-maison-hairline shadow-sm space-y-4">
-        <div className="flex items-center justify-between border-b border-maison-hairline pb-3">
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-amber-600" />
-            <h3 className="font-serif text-lg font-bold text-maison-charcoal">
-              Contratos com Alerta de Vencimento (Próximos 90 Dias)
-            </h3>
-          </div>
-          <span className="text-xs font-sans text-maison-muted">Monitoramento de prazos</span>
+      <div className="bg-white p-5 sm:p-6 border border-conliz-slate space-y-4">
+        <div className="flex items-center gap-2 border-b border-conliz-slate pb-3">
+          <Clock className="w-4 h-4 text-amber-600" />
+          <h3 className="font-sans text-base font-semibold text-conliz-charcoal">
+            Contratos próximos do vencimento
+          </h3>
         </div>
-
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs font-sans">
+          <table className="w-full text-left text-xs font-sans min-w-[640px]">
             <thead>
-              <tr className="border-b border-maison-hairline bg-maison-linen text-maison-charcoal">
-                <th className="py-2.5 px-4 font-bold tracking-editorial uppercase">Número</th>
-                <th className="py-2.5 px-4 font-bold tracking-editorial uppercase">Obra / Título</th>
-                <th className="py-2.5 px-4 font-bold tracking-editorial uppercase">Contratante</th>
-                <th className="py-2.5 px-4 font-bold tracking-editorial uppercase">Valor Total</th>
-                <th className="py-2.5 px-4 font-bold tracking-editorial uppercase">Data Término</th>
-                <th className="py-2.5 px-4 font-bold tracking-editorial uppercase">Ação</th>
+              <tr className="border-b border-conliz-slate bg-conliz-slate/50 text-conliz-charcoal">
+                <th className="py-2.5 px-3 font-semibold tracking-wider uppercase">Número</th>
+                <th className="py-2.5 px-3 font-semibold tracking-wider uppercase">Título</th>
+                <th className="py-2.5 px-3 font-semibold tracking-wider uppercase">Cliente</th>
+                <th className="py-2.5 px-3 font-semibold tracking-wider uppercase">Valor</th>
+                <th className="py-2.5 px-3 font-semibold tracking-wider uppercase">Término</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-maison-hairline">
+            <tbody className="divide-y divide-conliz-slate">
               {contratosVencendo.map((c: any) => (
-                <tr key={c.id} className="hover:bg-maison-cream/50 transition-colors">
-                  <td className="py-3 px-4 font-mono font-bold text-maison-terracotta">{c.numero}</td>
-                  <td className="py-3 px-4 font-medium text-maison-charcoal">{c.titulo}</td>
-                  <td className="py-3 px-4 text-maison-muted">{c.cliente}</td>
-                  <td className="py-3 px-4 font-semibold text-maison-charcoal">{formatCurrency(c.valor)}</td>
-                  <td className="py-3 px-4 text-amber-800 font-semibold">{c.dataFim}</td>
-                  <td className="py-3 px-4">
-                    <button className="text-[11px] text-maison-terracotta font-semibold hover:underline">
-                      Gerar Aditivo
-                    </button>
-                  </td>
+                <tr key={c.id} className="hover:bg-conliz-slate/30">
+                  <td className="py-3 px-3 font-mono font-semibold text-[#0A2540]">{c.numero}</td>
+                  <td className="py-3 px-3 text-conliz-charcoal">{c.titulo}</td>
+                  <td className="py-3 px-3 text-conliz-muted">{c.cliente}</td>
+                  <td className="py-3 px-3 font-semibold">{formatCurrency(c.valor)}</td>
+                  <td className="py-3 px-3 text-amber-800 font-semibold">{c.dataFim}</td>
                 </tr>
               ))}
               {contratosVencendo.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="py-6 text-center text-maison-muted">
+                  <td colSpan={5} className="py-6 text-center text-conliz-muted">
                     Nenhum contrato com vencimento nos próximos 90 dias.
                   </td>
                 </tr>
