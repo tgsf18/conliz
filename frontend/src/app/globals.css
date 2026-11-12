@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 38 33% 97%;      /* #FAF8F5 Maison Cream */
+    --foreground: 30 10% 15%;      /* #2A2622 Maison Charcoal */
+    --card: 38 33% 97%;
+    --card-foreground: 30 10% 15%;
+    --popover: 38 33% 97%;
+    --popover-foreground: 30 10% 15%;
+    --primary: 18 45% 45%;         /* #A65E3F Terracotta */
+    --primary-foreground: 38 33% 98%;
+    --secondary: 35 32% 92%;       /* #F3ECE2 Linen */
+    --secondary-foreground: 30 10% 15%;
+    --muted: 33 25% 91%;
+    --muted-foreground: 30 8% 45%; /* #7C736A Muted text */
+    --accent: 35 32% 92%;
+    --accent-foreground: 30 10% 15%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 15% 87%;          /* #E4DED8 Hairline */
+    --input: 30 15% 87%;
+    --ring: 18 45% 45%;
+    --radius: 0.25rem;
+  }
+
+  .dark {
+    --background: 30 12% 10%;
+    --foreground: 38 25% 92%;
+    --card: 30 12% 12%;
+    --card-foreground: 38 25% 92%;
+    --popover: 30 12% 12%;
+    --popover-foreground: 38 25% 92%;
+    --primary: 18 50% 52%;
+    --primary-foreground: 30 12% 10%;
+    --secondary: 30 10% 18%;
+    --secondary-foreground: 38 25% 92%;
+    --muted: 30 10% 18%;
+    --muted-foreground: 30 8% 65%;
+    --accent: 30 10% 18%;
+    --accent-foreground: 38 25% 92%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 38 25% 92%;
+    --border: 30 8% 22%;
+    --input: 30 8% 22%;
+    --ring: 18 50% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased selection:bg-maison-terracotta/20 selection:text-maison-charcoal;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-tight text-maison-charcoal;
+  }
+}
+
+/* Hairline border utilities */
+.border-hairline {
+  border-width: 1px;
+  border-color: #E4DED8;
+}
+
+/* Editorial typography style */
+.editorial-sub {
+  font-family: var(--font-inter);
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+  color: #A65E3F;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8D0C7;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A65E3F;
+}
