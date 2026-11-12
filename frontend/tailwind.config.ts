@@ -11,9 +11,7 @@ const config: Config = {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      screens: { "2xl": "1400px" },
     },
     extend: {
       colors: {
@@ -22,29 +20,28 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // Conliz Official Palette (Navy + Gold)
         conliz: {
-          navy: "#0A2540",          // Azul oficial profundo
-          navyLight: "#0F3460",     // Azul um pouco mais claro
-          navyDark: "#061828",      // Quase preto azul
-          gold: "#C9A227",          // Dourado oficial
-          goldHover: "#B8911F",     // Dourado hover
-          goldLight: "#E8D48B",     // Dourado claro
-          cream: "#F8F6F2",         // Fundo claro
-          slate: "#F1F3F5",         // Alternativa clara
-          muted: "#6B7C8F",         // Texto secundário
-          charcoal: "#1A2332",      // Texto principal escuro
+          navy: "#0A2540",
+          navyDeep: "#071B2E",
+          navyLight: "#0F3460",
+          navyDark: "#050F1A",
+          gold: "#B8973A",
+          goldHover: "#A6862F",
+          goldLight: "#D4C08A",
+          cream: "#F7F8FA",
+          slate: "#EEF1F5",
+          muted: "#64748B",
+          charcoal: "#0F172A",
         },
-        // Mantém aliases antigos temporariamente para não quebrar tudo de uma vez
         maison: {
-          cream: "#F8F6F2",
-          linen: "#F1F3F5",
-          charcoal: "#1A2332",
-          muted: "#6B7C8F",
-          terracotta: "#C9A227",    // agora aponta para gold
-          hairline: "#E2E6EB",
-          sand: "#E8D48B",
-          terracottaHover: "#B8911F",
+          cream: "#F7F8FA",
+          linen: "#EEF1F5",
+          charcoal: "#0F172A",
+          muted: "#64748B",
+          terracotta: "#0A2540",
+          hairline: "#E2E8F0",
+          sand: "#94A3B8",
+          terracottaHover: "#071B2E",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -76,8 +73,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ["var(--font-cormorant)", "Georgia", "serif"],
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        serif: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -85,11 +82,8 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       letterSpacing: {
-        widest: "0.25em",
-        editorial: "0.2em",
-      },
-      lineHeight: {
-        editorial: "0.92",
+        widest: "0.2em",
+        editorial: "0.14em",
       },
     },
   },
