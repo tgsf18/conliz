@@ -70,6 +70,12 @@ O arquivo `.env.example` lista banco, JWT, cookies, CORS, admin inicial, TOTP, r
 
 O `JWT_SECRET` padrão do `application.yml` existe para o perfil local. Em Docker ou produção, substitua por um segredo exclusivo.
 
+## Deploy em produção
+
+Banco no **Supabase** (Postgres) + API e site no **Render** (Docker), em dois serviços criados por blueprint. Guia completo em [DEPLOY.md](DEPLOY.md); o `render.yaml` na raiz já traz healthcheck, segredos gerados e as variáveis do Supabase.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/tgsf18/conliz)
+
 ## Painel
 
 - Dashboard em `/admin/dashboard` lê funil, caixa, obras, contratos e headcount dos repositórios.
